@@ -1,9 +1,10 @@
-package com.example.componets;
+package com.example.components;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 import com.example.flappybird.R;
 
@@ -72,7 +73,7 @@ public class Bird {
             this.climbing = 0;
         } else {
             this.climbing += 1;
-            this.y -= 15;
+            this.y -= 25;
         }
     }
 

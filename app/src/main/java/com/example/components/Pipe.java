@@ -1,4 +1,4 @@
-package com.example.componets;
+package com.example.components;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,31 +17,30 @@ public class Pipe {
 
     private int opening;
     private int x;
-    private int y = 1265;
+    private int y;
     private int resetPos;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Pipe(Resources res, int x, int screenWidth) {
-
+    public Pipe(Resources res, int x, int screenWidth, int screenHeight) {
         this.x = x;
+        this.y = screenHeight - 50;
         this.resetPos = screenWidth;
-        this.opening = this.generateRandom(300, 500);
+        this.opening = this.generateRandom(300, 600);
         this.pipeUp = BitmapFactory.decodeResource(res, R.drawable.pipe_up);
 
-        int type = generateRandom(0, 5);
+        int type = generateRandom(0, 4);
 
         if (type == 1) {
-            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down1);
+            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down_thick_tall);
         } else if (type == 2) {
-            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down2);
+            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down_slim_small);
         } else if (type == 3) {
-            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down3);
+            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down_slim_tall);
         } else {
-            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down4);
+            this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down_thick_small);
         }
 
         this.y -= this.pipeDown.getHeight();
-
     }
 
     public void draw(Canvas canvas) {
@@ -76,14 +75,12 @@ public class Pipe {
     }
 
     public int getPipeUpperY() {
-
         return this.y - this.opening;
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setOpening() {
-        this.opening = this.generateRandom(300, 500);
+        this.opening = this.generateRandom(300, 600);
     }
 
 }

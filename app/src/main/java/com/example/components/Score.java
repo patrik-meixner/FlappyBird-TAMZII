@@ -1,4 +1,4 @@
-package com.example.componets;
+package com.example.components;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,7 +18,7 @@ public class Score {
 
         for (int i = 0; i < 10; i++) {
             try {
-                this.numbers[i] = BitmapFactory.decodeStream(context.getAssets().open(i + ".png"));
+                this.numbers[i] = BitmapFactory.decodeStream(context.getAssets().open("numbers/" + i + ".png"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -28,8 +28,10 @@ public class Score {
     public void draw(Canvas canvas) {
         if (this.score >= 10) {
             String scoreString = Integer.toString(this.score);
+
             int i0 = Character.getNumericValue(scoreString.charAt(0));
             int i1 = Character.getNumericValue(scoreString.charAt(1));
+
             canvas.drawBitmap(this.numbers[i0], this.x1, this.y, null);
             canvas.drawBitmap(this.numbers[i1], this.x2, this.y, null);
         } else {

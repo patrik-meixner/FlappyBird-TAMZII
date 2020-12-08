@@ -1,4 +1,4 @@
-package com.example.componets;
+package com.example.components;
 
 import android.content.Context;
 import android.graphics.Bitmap;
