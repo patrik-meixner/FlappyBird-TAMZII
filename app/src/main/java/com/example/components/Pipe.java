@@ -50,11 +50,11 @@ public class Pipe {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void move() {
-        if (this.x <= -280) {
+        if (this.x <= -400) {
             this.x = this.resetPos;
             this.opening -= generateRandom(50, 100);
         }
-        this.x -= 8;
+        this.x -= 10;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

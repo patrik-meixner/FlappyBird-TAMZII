@@ -24,7 +24,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread thread;
     private Context context;
 
-    private Pipe[] pipeList;
+    private Pipe[] pipeList = new Pipe[4];
     private Bird bird;
     private Floor floor;
 
@@ -180,32 +180,33 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initComponents() {
         try {
-            Bitmap bgBuffer = BitmapFactory.decodeStream(this.context.getAssets().open("background.jpg"));
-            float bgScale = (float) bgBuffer.getHeight() / (float) getHeight();
-            int newWidth = Math.round(bgBuffer.getWidth() / bgScale);
-            int newHeight = Math.round(bgBuffer.getHeight() / bgScale);
-            this.background = Bitmap.createScaledBitmap(bgBuffer, newWidth + 15, newHeight, true);
+            Bitmap backgroundBuffer = BitmapFactory.decodeStream(this.context.getAssets().open("background.jpg"));
+
+            float backgroundScale = (float) backgroundBuffer.getHeight() / (float) getHeight();
+            int newWidth = Math.round(backgroundBuffer.getWidth() / backgroundScale);
+            int newHeight = Math.round(backgroundBuffer.getHeight() / backgroundScale);
+
+            this.background = Bitmap.createScaledBitmap(backgroundBuffer, newWidth + 15, newHeight, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         this.pipeIndexQueue = new LinkedList<>();
-        this.pipeList = new Pipe[4];
         int x = getWidth();
 
         for (int i = 0; i < this.pipeList.length; i++) {
             this.pipeIndexQueue.add(i);
             this.pipeList[i] = new Pipe(getResources(), x, getWidth(), getHeight());
-            x += 320;
+            x += 400;
         }
 
         this.score = new Score(getContext(), getWidth() / 2 - 30, getWidth() / 2 + 30, getHeight() / 5);
         this.bird = new Bird(getResources(), 55, (getHeight() / 2) - 150);
         this.floor = new Floor(this.context, 0, getHeight() - 50, getWidth());
 
-        this.gameOverText = new Text(context, getWidth() / 5, getHeight() / 2, "Tap to start");
-        this.restartText = new Text(context, getWidth() / 5, (getHeight() / 3) + 150, "Tap to Restart");
-        this.bestScoreText = new Text(context, getWidth() / 5 + 140, getHeight() / 2 + 10, "Best: ");
+        this.gameOverText = new Text(context, getWidth() / 5, getHeight() / 3, "Tap to start", 160);
+        this.restartText = new Text(context, getWidth() / 6, (getHeight() / 3) + 150, "Tap to Restart", 160);
+        this.bestScoreText = new Text(context, getWidth() / 3, getHeight() / 3 + 300, "Best: ");
         this.initComponents = true;
     }
 
