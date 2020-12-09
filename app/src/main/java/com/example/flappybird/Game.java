@@ -244,7 +244,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 this.pipeList[i].setX(position);
                 this.pipeList[i].setOpening();
                 this.pipeIndexQueue.add(i);
-                position += 320;
+                position += 400;
             }
         }
         return true;

@@ -6,7 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.view.SurfaceHolder;
 
 public class GameThread extends Thread {
-    private static final int FPS = 100;
+    private static final int FPS = 144;
     private final SurfaceHolder surfaceHolder;
     private Game game;
     private boolean running;

@@ -30,6 +30,8 @@ public class Pipe {
 
         int type = generateRandom(0, 4);
 
+//        this.pipeDown = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.pipe_down_thick_tall), 90, generateRandom(100, 800), true);
+
         if (type == 1) {
             this.pipeDown = BitmapFactory.decodeResource(res, R.drawable.pipe_down_thick_tall);
         } else if (type == 2) {

@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 
 public class Floor {
 
-    private Bitmap bar1;
-    private Bitmap bar2;
+    private Bitmap floorAlpha;
+    private Bitmap floorBeta;
     private int x1;
     private int y1;
     private int x2;
@@ -16,19 +16,17 @@ public class Floor {
     private int outOfScreen;
 
     public Floor(Context context, int x, int y, int width) {
-        Bitmap bar = null;
+        Bitmap floor = null;
 
         try {
-
-            bar = BitmapFactory.decodeStream(context.getAssets().open("floor.png"));
-
+            floor = BitmapFactory.decodeStream(context.getAssets().open("floor.png"));
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-        this.bar1 = Bitmap.createScaledBitmap(bar, width, 70, true);
-        this.bar2 = Bitmap.createScaledBitmap(bar, width + 6, 70, true);
+        if (floor != null) {
+            this.floorAlpha = Bitmap.createScaledBitmap(floor, width, 70, true);
+            this.floorBeta = Bitmap.createScaledBitmap(floor, width + 6, 70, true);
+        }
         this.x1 = x;
         this.y1 = y;
         this.x2 = width - 12;
@@ -37,8 +35,8 @@ public class Floor {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(this.bar1, this.x1, this.y1, null);
-        canvas.drawBitmap(this.bar2, this.x2, this.y2, null);
+        canvas.drawBitmap(this.floorAlpha, this.x1, this.y1, null);
+        canvas.drawBitmap(this.floorBeta, this.x2, this.y2, null);
     }
 
     public void move() {
