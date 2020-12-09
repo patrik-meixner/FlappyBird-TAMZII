@@ -20,6 +20,7 @@ public class Bird {
     private boolean climb;
     private int climbing;
     private boolean dead;
+    private int wingFlap;
 
     public Bird(Resources res, int x, int y) {
         this.birdWingsDown = BitmapFactory.decodeResource(res, R.drawable.wing_down);
@@ -32,6 +33,7 @@ public class Bird {
         this.dead = false;
         this.climb = false;
         this.climbing = 0;
+        this.wingFlap = 0;
         this.birdRendered = true;
     }
 
@@ -42,7 +44,10 @@ public class Bird {
             } else {
                 canvas.drawBitmap(this.birdWingsDown, this.x, this.y, null);
             }
-            this.birdRendered = !this.birdRendered;
+            wingFlap++;
+            if (wingFlap % 4 == 0) {
+                this.birdRendered = !this.birdRendered;
+            }
         } else {
             canvas.drawBitmap(this.birdDead, this.x, this.y, null);
         }
