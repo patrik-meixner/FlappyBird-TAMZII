@@ -61,14 +61,11 @@ public class GameThread extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 
     public void setRunning(boolean isRunning) {
-
         this.running = isRunning;
-
     }
 
 }

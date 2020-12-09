@@ -16,6 +16,7 @@ import com.example.components.Pipe;
 import com.example.components.Score;
 import com.example.components.Text;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -78,13 +79,17 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void renderGameOver() {
         this.end = true;
+
         this.gameOverText.setX(getWidth() / 4);
         this.gameOverText.setY(getHeight() / 3);
         this.gameOverText.setText("Game Over");
-        this.bird.changeStatus();
+
+        this.bird.toggleLife();
+
         if (this.score.getScore() > this.bestScore) {
             this.bestScore = this.score.getScore();
         }
+
         this.bestScoreText.setText("Best: " + this.bestScore);
     }
 
@@ -93,8 +98,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (!this.end) {
             if (this.start) {
 
-                for (Pipe p : this.pipeList) {
-                    p.move();
+                for (Pipe pipe : this.pipeList) {
+                    pipe.move();
                 }
 
                 this.updatePipeQueue();
@@ -121,7 +126,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-    public void drawCanvas(Canvas canvas) {
+    public void drawCanvas(Canvas canvas) throws IOException {
         canvas.drawBitmap(this.background, 0, 0, null);
         this.floor.draw(canvas);
 
@@ -134,12 +139,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         this.bird.draw(canvas);
-        this.score.draw(canvas);
+        this.score.draw(canvas, context);
 
         if (this.end) {
             this.gameOverText.draw(canvas);
             this.restartText.draw(canvas);
             this.bestScoreText.draw(canvas);
+            this.score.makeInvisible(canvas);
 
             if (this.bird.getY() < getHeight() - 150) {
                 this.bird.fall(this.gravity);
@@ -227,16 +233,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             this.start = true;
             this.end = false;
             this.gravity = 0;
-            this.bird.changeStatus();
+
+            this.bird.toggleLife();
             this.bird.setY((getHeight() / 2) - 150);
-            int pos = getWidth();
+
+            int position = getWidth();
             this.score.reset();
 
             for (int i = 0; i < this.pipeList.length; i++) {
-                this.pipeList[i].setX(pos);
+                this.pipeList[i].setX(position);
                 this.pipeList[i].setOpening();
                 this.pipeIndexQueue.add(i);
-                pos += 320;
+                position += 320;
             }
         }
         return true;

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import java.io.IOException;
+
 public class Score {
     private Bitmap[] numbers;
     private int score, x1, x2, y;
@@ -25,18 +27,26 @@ public class Score {
         }
     }
 
-    public void draw(Canvas canvas) {
-        if (this.score >= 10) {
-            String scoreString = Integer.toString(this.score);
-
-            int i0 = Character.getNumericValue(scoreString.charAt(0));
-            int i1 = Character.getNumericValue(scoreString.charAt(1));
-
-            canvas.drawBitmap(this.numbers[i0], this.x1, this.y, null);
-            canvas.drawBitmap(this.numbers[i1], this.x2, this.y, null);
+    public void draw(Canvas canvas, Context context) throws IOException {
+        if (this.score == -1) {
+            canvas.drawBitmap(BitmapFactory.decodeStream(context.getAssets().open("numbers/blank.png")), this.x1, this.y, null);
         } else {
-            canvas.drawBitmap(this.numbers[this.score], this.x1, this.y, null);
+            if (this.score >= 10) {
+                String scoreString = Integer.toString(this.score);
+
+                int i0 = Character.getNumericValue(scoreString.charAt(0));
+                int i1 = Character.getNumericValue(scoreString.charAt(1));
+
+                canvas.drawBitmap(this.numbers[i0], this.x1, this.y, null);
+                canvas.drawBitmap(this.numbers[i1], this.x2, this.y, null);
+            } else {
+                canvas.drawBitmap(this.numbers[this.score], this.x1, this.y, null);
+            }
         }
+    }
+
+    public void makeInvisible(Canvas canvas) {
+        this.score = -1;
     }
 
     public void reset() {
