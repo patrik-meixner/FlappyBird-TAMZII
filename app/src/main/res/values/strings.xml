@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">Flappy Bird</string>
-    <string name="title_activity_main_menu">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="high_scores">High Scores</string>
 </resources>

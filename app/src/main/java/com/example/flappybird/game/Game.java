@@ -1,4 +1,4 @@
-package com.example.flappybird;
+package com.example.flappybird.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,12 +16,22 @@ import com.example.components.Pipe;
 import com.example.components.Score;
 import com.example.components.Text;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
-public class Game extends SurfaceView implements SurfaceHolder.Callback {
+import static android.content.Context.MODE_PRIVATE;
 
+public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread thread;
     private Context context;
 
@@ -77,6 +87,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void renderGameOver() {
         this.end = true;
 
@@ -91,7 +102,68 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         this.bestScoreText.setText("Best: " + this.bestScore);
+
+
+        try {
+            List<Integer> scoreList = loadScore();
+            FileOutputStream fos = context.openFileOutput("score.txt", MODE_PRIVATE);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fos);
+            Collections.sort(scoreList);
+
+
+            if (scoreList.size() < 5) {
+                scoreList.add(this.score.getScore());
+                Collections.sort(scoreList);
+
+                for (int i = 0; i < scoreList.size(); i++) {
+                    myOutWriter.append(scoreList.get(i).toString()).append("\n");
+                }
+            } else {
+                Integer lowestScore = Collections.min(scoreList);
+                if (lowestScore < this.score.getScore()) {
+                    scoreList.set(scoreList.indexOf(lowestScore), this.score.getScore());
+                    Collections.sort(scoreList);
+                }
+
+                for (int i = 0; i < scoreList.size(); i++) {
+                    myOutWriter.append(scoreList.get(i).toString()).append("\n");
+                }
+            }
+
+            myOutWriter.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    public List<Integer> loadScore() {
+        try {
+            FileInputStream fis = context.openFileInput("score.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+
+            String text;
+            List<Integer> scoreList = new ArrayList<>();
+
+            while ((text = br.readLine()) != null) {
+                System.out.println(text);
+                if (!text.equals("")) {
+                    scoreList.add(Integer.valueOf(text));
+                }
+            }
+
+            return scoreList;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void update() {

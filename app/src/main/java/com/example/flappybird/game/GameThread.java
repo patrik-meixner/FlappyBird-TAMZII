@@ -1,4 +1,4 @@
-package com.example.flappybird;
+package com.example.flappybird.game;
 
 import android.graphics.Canvas;
 import android.os.Build;
