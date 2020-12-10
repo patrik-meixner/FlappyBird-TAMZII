@@ -1,14 +1,14 @@
 package com.example.flappybird.activities;
 
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
+import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.flappybird.R;
@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HighScoresActivity extends AppCompatActivity {
@@ -32,12 +33,9 @@ public class HighScoresActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_high_scrores);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         renderHighScores();
+
     }
 
     public List<Integer> loadScore() {
@@ -67,13 +65,14 @@ public class HighScoresActivity extends AppCompatActivity {
 
     private void renderHighScores() {
         List<Integer> scoreArray = loadScore();
+        Collections.reverse(scoreArray);
 
-        ConstraintLayout lLayout = (ConstraintLayout) findViewById(R.id.high_scores_layout);
+        int[] scores = {R.id.score_1, R.id.score_2, R.id.score_3, R.id.score_4, R.id.score_5};
+
         for (int i = 0; i < scoreArray.size(); i++) {
-            TextView tv = new TextView(this);
-            tv.setText(scoreArray.get(i));
-            tv.setId(i);
-            lLayout.addView(tv);
+            TextView tv = findViewById(scores[i]);
+            String text = "Patrik: " + scoreArray.get(i);
+            tv.setText(text);
         }
     }
 
