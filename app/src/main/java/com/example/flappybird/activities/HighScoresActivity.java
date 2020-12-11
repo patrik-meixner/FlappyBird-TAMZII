@@ -1,16 +1,13 @@
 package com.example.flappybird.activities;
 
-import android.graphics.Typeface;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.components.User;
 import com.example.flappybird.R;
 
 import java.io.BufferedReader;
@@ -32,25 +29,25 @@ public class HighScoresActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_high_scrores);
+        setContentView(R.layout.activity_high_scores);
 
         renderHighScores();
 
     }
 
-    public List<Integer> loadScore() {
+    public List<User> loadScore() {
         try {
             FileInputStream fis = getBaseContext().openFileInput("score.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
 
             String text;
-            List<Integer> scoreList = new ArrayList<>();
+            List<User> scoreList = new ArrayList<>();
 
             while ((text = br.readLine()) != null) {
-                System.out.println(text);
                 if (!text.equals("")) {
-                    scoreList.add(Integer.valueOf(text));
+                    User user = new User(text.split(",")[0], Integer.valueOf(text.split(",")[1]));
+                    scoreList.add(user);
                 }
             }
 
@@ -64,14 +61,16 @@ public class HighScoresActivity extends AppCompatActivity {
     }
 
     private void renderHighScores() {
-        List<Integer> scoreArray = loadScore();
+        List<User> scoreArray = loadScore();
+
+        Collections.sort(scoreArray);
         Collections.reverse(scoreArray);
 
         int[] scores = {R.id.score_1, R.id.score_2, R.id.score_3, R.id.score_4, R.id.score_5};
-
         for (int i = 0; i < scoreArray.size(); i++) {
             TextView tv = findViewById(scores[i]);
-            String text = "Patrik: " + scoreArray.get(i);
+            User user = scoreArray.get(i);
+            String text = (i + 1) + ")" + "   " + user.getName() + ": " + user.getScore();
             tv.setText(text);
         }
     }

@@ -12,9 +12,12 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.example.flappybird.R;
+import com.example.flappybird.application.MyApplication;
 import com.example.flappybird.game.Game;
 
 public class GameActivity extends AppCompatActivity {
+    private String userName;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +58,15 @@ public class GameActivity extends AppCompatActivity {
         game.addView(gameView);
         game.addView(GameButtons);
 
+        userName = ((MyApplication) getApplication()).getUserName();
+
         setContentView(game);
     }
 
     public void goToMainMenu(View view) {
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

@@ -15,6 +15,10 @@ import com.example.components.Floor;
 import com.example.components.Pipe;
 import com.example.components.Score;
 import com.example.components.Text;
+import com.example.components.User;
+import com.example.flappybird.activities.GameActivity;
+import com.example.flappybird.activities.UserInputActivity;
+import com.example.flappybird.application.MyApplication;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -46,6 +50,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap background;
     private Queue<Integer> pipeIndexQueue;
     private Score score;
+    private String userName;
 
     private boolean start = false;
     private boolean tap = false;
@@ -58,6 +63,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public Game(Context context) {
         super(context);
         this.context = context;
+        userName = ((MyApplication) context.getApplicationContext()).getUserName();
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(), this);
         setFocusable(true);
@@ -103,30 +109,33 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         this.bestScoreText.setText("Best: " + this.bestScore);
 
-
         try {
-            List<Integer> scoreList = loadScore();
+            List<User> scoreList = loadScore();
             FileOutputStream fos = context.openFileOutput("score.txt", MODE_PRIVATE);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fos);
             Collections.sort(scoreList);
 
 
             if (scoreList.size() < 5) {
-                scoreList.add(this.score.getScore());
+                scoreList.add(new User(userName, this.score.getScore()));
                 Collections.sort(scoreList);
 
                 for (int i = 0; i < scoreList.size(); i++) {
-                    myOutWriter.append(scoreList.get(i).toString()).append("\n");
+                    User user = scoreList.get(i);
+
+                    myOutWriter.append(user.getName()).append(",").append(String.valueOf(user.getScore())).append("\n");
                 }
             } else {
-                Integer lowestScore = Collections.min(scoreList);
-                if (lowestScore < this.score.getScore()) {
-                    scoreList.set(scoreList.indexOf(lowestScore), this.score.getScore());
+                User lowestScore = Collections.min(scoreList);
+
+                if (lowestScore.getScore() < this.score.getScore()) {
+                    scoreList.set(scoreList.indexOf(lowestScore), new User(userName, this.score.getScore()));
                     Collections.sort(scoreList);
                 }
 
                 for (int i = 0; i < scoreList.size(); i++) {
-                    myOutWriter.append(scoreList.get(i).toString()).append("\n");
+                    User user = scoreList.get(i);
+                    myOutWriter.append(user.getName()).append(",").append(String.valueOf(user.getScore())).append("\n");
                 }
             }
 
@@ -139,19 +148,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public List<Integer> loadScore() {
+    public List<User> loadScore() {
         try {
             FileInputStream fis = context.openFileInput("score.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
 
             String text;
-            List<Integer> scoreList = new ArrayList<>();
+            List<User> scoreList = new ArrayList<>();
 
             while ((text = br.readLine()) != null) {
-                System.out.println(text);
                 if (!text.equals("")) {
-                    scoreList.add(Integer.valueOf(text));
+                    User user = new User(text.split(",")[0], Integer.valueOf(text.split(",")[1]));
+                    scoreList.add(user);
                 }
             }
 
