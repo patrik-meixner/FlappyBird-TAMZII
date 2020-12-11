@@ -36,10 +36,10 @@ import java.util.Queue;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread thread;
-    private Context context;
+    private final GameThread thread;
+    private final Context context;
 
-    private Pipe[] pipeList = new Pipe[4];
+    private final Pipe[] pipeList = new Pipe[4];
     private Bird bird;
     private Floor floor;
 
@@ -50,7 +50,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap background;
     private Queue<Integer> pipeIndexQueue;
     private Score score;
-    private String userName;
+    private final String userName;
 
     private boolean start = false;
     private boolean tap = false;
@@ -111,7 +111,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         try {
             List<User> scoreList = loadScore();
-            FileOutputStream fos = context.openFileOutput("score.txt", MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput("score.csv", MODE_PRIVATE);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fos);
             Collections.sort(scoreList);
 
@@ -150,7 +150,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public List<User> loadScore() {
         try {
-            FileInputStream fis = context.openFileInput("score.txt");
+            FileInputStream fis = context.openFileInput("score.csv");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
 

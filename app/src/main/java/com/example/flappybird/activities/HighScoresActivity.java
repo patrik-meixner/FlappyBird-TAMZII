@@ -37,7 +37,7 @@ public class HighScoresActivity extends AppCompatActivity {
 
     public List<User> loadScore() {
         try {
-            FileInputStream fis = getBaseContext().openFileInput("score.txt");
+            FileInputStream fis = getBaseContext().openFileInput("score.csv");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
 
