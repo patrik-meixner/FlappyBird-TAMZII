@@ -1,6 +1,7 @@
 package com.example.flappybird.game;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -71,6 +72,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         hitSound = MediaPlayer.create(context, R.raw.hit);
 
         userName = ((MyApplication) context.getApplicationContext()).getUserName();
+
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(), this);
         setFocusable(true);

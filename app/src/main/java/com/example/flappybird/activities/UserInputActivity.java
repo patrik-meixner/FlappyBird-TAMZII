@@ -1,6 +1,7 @@
 package com.example.flappybird.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,27 +28,36 @@ public class UserInputActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_user_input);
+        SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        String sharedPrefsUserName = sharedPreferences.getString("userName", "");
 
-        userNameInput = findViewById(R.id.userNameInput);
-        userNameInput.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+        if (!sharedPrefsUserName.isEmpty()) {
+            ((MyApplication) getApplication()).setUserName(sharedPrefsUserName);
+            Intent mainMenuIntent = new Intent(UserInputActivity.this, MainMenuActivity.class);
+            UserInputActivity.this.startActivity(mainMenuIntent);
+        } else {
+            setContentView(R.layout.activity_user_input);
 
-                    ((MyApplication) getApplication()).setUserName(userNameInput.getText().toString());
-                    userName = ((MyApplication) getApplication()).getUserName();
-                    Toast.makeText(UserInputActivity.this, "Hello " + userName, Toast.LENGTH_SHORT).show();
+            userNameInput = findViewById(R.id.userNameInput);
+            userNameInput.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                    if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                    Intent mainMenuIntent = new Intent(UserInputActivity.this, MainMenuActivity.class);
-                    UserInputActivity.this.startActivity(mainMenuIntent);
+                        ((MyApplication) getApplication()).setUserName(userNameInput.getText().toString());
+                        userName = ((MyApplication) getApplication()).getUserName();
+                        Toast.makeText(UserInputActivity.this, "Hello " + userName, Toast.LENGTH_SHORT).show();
 
-                    return true;
+                        Intent mainMenuIntent = new Intent(UserInputActivity.this, MainMenuActivity.class);
+                        UserInputActivity.this.startActivity(mainMenuIntent);
+
+                        return true;
+                    }
+
+                    return false;
                 }
-
-                return false;
-            }
-        });
+            });
+        }
     }
 }
