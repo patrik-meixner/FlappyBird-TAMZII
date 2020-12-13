@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
@@ -16,8 +17,7 @@ import com.example.components.Pipe;
 import com.example.components.Score;
 import com.example.components.Text;
 import com.example.components.User;
-import com.example.flappybird.activities.GameActivity;
-import com.example.flappybird.activities.UserInputActivity;
+import com.example.flappybird.R;
 import com.example.flappybird.application.MyApplication;
 
 import java.io.BufferedReader;
@@ -60,9 +60,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private int gravity;
     private int bestScore;
 
+    private final MediaPlayer flapSound;
+    private final MediaPlayer hitSound;
+
     public Game(Context context) {
         super(context);
         this.context = context;
+
+        flapSound = MediaPlayer.create(context, R.raw.flap);
+        hitSound = MediaPlayer.create(context, R.raw.hit);
+
         userName = ((MyApplication) context.getApplicationContext()).getUserName();
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(), this);
@@ -187,6 +194,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
                 if (this.checkCollision() || this.bird.getY() >= getHeight() - 150) {
                     renderGameOver();
+                    hitSound.start();
                 }
             }
 
@@ -241,7 +249,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (this.pipeList[frontPipe].getX() <= -10) {
             frontPipe = this.pipeIndexQueue.remove();
             this.pipeIndexQueue.add(frontPipe);
-            this.score.increase();
+            this.score.increase(this.context);
         }
     }
 
@@ -284,7 +292,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (int i = 0; i < this.pipeList.length; i++) {
             this.pipeIndexQueue.add(i);
             this.pipeList[i] = new Pipe(getResources(), x, getWidth(), getHeight());
-            x += 400;
+            x += 320;
         }
 
         this.score = new Score(getContext(), getWidth() / 2 - 30, getWidth() / 2 + 30, getHeight() / 5);
@@ -309,6 +317,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             this.start = true;
         }
 
+        if (!this.end && !flapSound.isPlaying()) {
+            flapSound.start();
+        } else if (!this.end && flapSound.isPlaying()) {
+            flapSound.stop();
+            flapSound.start();
+        }
+
         if (this.end && this.bird.getY() >= getHeight() - 150) {
             this.pipeIndexQueue.clear();
             this.start = true;
@@ -325,7 +340,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 this.pipeList[i].setX(position);
                 this.pipeList[i].setOpening();
                 this.pipeIndexQueue.add(i);
-                position += 400;
+                position += 320;
             }
         }
         return true;

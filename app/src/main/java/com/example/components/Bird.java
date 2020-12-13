@@ -4,17 +4,18 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 
 import com.example.flappybird.R;
 
 public class Bird {
-    private Bitmap birdWingsUp;
-    private Bitmap birdWingsDown;
-    private Bitmap birdDead;
+    private final Bitmap birdWingsUp;
+    private final Bitmap birdWingsDown;
+    private final Bitmap birdDead;
 
     private boolean birdRendered;
 
-    private int x;
+    private final int x;
     private int y;
 
     private boolean climb;

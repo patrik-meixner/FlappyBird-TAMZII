@@ -4,12 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
+
+import com.example.flappybird.R;
 
 import java.io.IOException;
 
 public class Score {
-    private Bitmap[] numbers;
-    private int score, x1, x2, y;
+    private final Bitmap[] numbers;
+    private int score;
+    private final int x1;
+    private final int x2;
+    private final int y;
 
     public Score(Context context, int x1, int x2, int y) {
         this.numbers = new Bitmap[10];
@@ -53,7 +59,10 @@ public class Score {
         this.score = 0;
     }
 
-    public void increase() {
+
+    public void increase(Context context) {
+        final MediaPlayer mp = MediaPlayer.create(context, R.raw.point);
+        mp.start();
         this.score++;
     }
 

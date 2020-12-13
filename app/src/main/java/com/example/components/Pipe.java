@@ -12,13 +12,13 @@ import com.example.flappybird.R;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Pipe {
-    private Bitmap pipeUp;
-    private Bitmap pipeDown;
+    private final Bitmap pipeUp;
+    private final Bitmap pipeDown;
 
     private int opening;
     private int x;
     private int y;
-    private int resetPos;
+    private final int resetPos;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Pipe(Resources res, int x, int screenWidth, int screenHeight) {
@@ -52,9 +52,14 @@ public class Pipe {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void move() {
-        if (this.x <= -400) {
+        if (this.x <= -280) {
             this.x = this.resetPos;
-            this.opening -= generateRandom(50, 100);
+
+            if (this.opening <= 350) {
+                this.opening += generateRandom(50, 150);
+            } else {
+                this.opening -= generateRandom(50, 100);
+            }
         }
         this.x -= 10;
     }
