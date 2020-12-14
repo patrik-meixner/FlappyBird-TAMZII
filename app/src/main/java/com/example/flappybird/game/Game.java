@@ -63,6 +63,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final MediaPlayer flapSound;
     private final MediaPlayer hitSound;
+    private final MediaPlayer fallSound;
 
     public Game(Context context) {
         super(context);
@@ -70,6 +71,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         flapSound = MediaPlayer.create(context, R.raw.flap);
         hitSound = MediaPlayer.create(context, R.raw.hit);
+        fallSound = MediaPlayer.create(context, R.raw.hit);
+
+        hitSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer player) {
+                fallSound.start();
+            }
+        });
 
         userName = ((MyApplication) context.getApplicationContext()).getUserName();
 
@@ -181,7 +189,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
         return new ArrayList<>();
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void update() {

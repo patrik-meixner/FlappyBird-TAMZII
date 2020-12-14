@@ -8,7 +8,7 @@ import android.view.SurfaceHolder;
 public class GameThread extends Thread {
     private static final int FPS = 144;
     private final SurfaceHolder surfaceHolder;
-    private Game game;
+    private final Game game;
     private boolean running;
     public static Canvas canvas;
 
